@@ -1,0 +1,68 @@
+{
+    "type": "object",
+    "properties": {
+        "keys": {
+            "type": "array",
+            "default": [],
+            "minItems": 0
+        },
+        "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "default": "unknown",
+            "maxLength": 64
+        },
+        "type": {
+            "type": "string",
+            "default": "git",
+            "enum": ["git"]
+        },
+        "include_regexp": {
+            "type": "string",
+            "default": "\\.(json|yml|toml)$",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "exclude_regexp": {
+            "type": "string",
+            "default": "\\.git",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "git": {
+            "type": "object",
+            "properties": {
+                "commit_count": {
+                    "type": "integer",
+                    "default": 10,
+                    "minimum": 1
+                },
+                "repository": {
+                    "type": "string",
+                    "default": "http://user:password@server/repo.git",
+                    "minLength": 1,
+                    "maxLength": 256
+                },
+                "branch": {
+                    "type": "string",
+                    "default": "master",
+                    "minLength": 1,
+                    "maxLength": 64
+                }
+            },
+            "required": [
+                "commit_count",
+                "repository",
+                "branch"
+            ]
+        }
+    },
+    "required": [
+        "keys",
+        "namespace",
+        "type",
+        "include_regexp",
+        "exclude_regexp",
+        "git"
+    ]
+}

@@ -77,7 +77,8 @@
         "koa-body": "^4.2.0",
         "koa-helmet": "^5.2.0",
         "koa-logger": "^3.2.1",
-        "koa-ts-decorators": "0.0.8"
+        "koa-ts-decorators": "0.0.8",
+        "logger-flx": "^0.1.2"
     },
     "remover": {
         "target": "./package.json",

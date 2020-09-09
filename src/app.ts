@@ -1,5 +1,5 @@
 import config from "./lib/entry";
-import { Logger } from "./lib/logger";
+import { Logger } from "logger-flx";
 import { Singleton } from "di-ts-decorators";
 import { KoaD } from "koa-ts-decorators";
 import { Authorization } from "./lib/authorization";
@@ -28,7 +28,7 @@ const bootstrap = async () => {
 
     } catch (error) {
         logger.error(error.message);
-        logger.red(error.stack);
+        logger.log(error.stack);
         process.exit(1);
     }
 

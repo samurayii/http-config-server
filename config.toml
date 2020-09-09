@@ -1,6 +1,6 @@
 [logger]
     mode = "debug"
-    timestamp = true
+    timestamp = "time"
 
 [authorization]
     [[authorization.users]]
@@ -11,3 +11,18 @@
     enable = true
     auth = true
     env = "development"
+
+[store]
+    keys = ["keys.json", "key_folder"]
+    default_namespace = "configs"
+    tmp = "tmp"
+    [[store.sources]]
+        keys = ["keys.json"]
+        namespace = "configs"
+        type = "git"
+        include_regexp = "\\.(json|yml|toml)"
+        exclude_regexp = "\\.git"
+        [store.sources.git]
+            commit_count = 10
+            repository = "https://user:password@server:3000/repository.git"
+            branch = "master"

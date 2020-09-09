@@ -1,5 +1,5 @@
 import * as koa_logger from "koa-logger";
-import { ILogger, Logger } from "../../lib/logger";
+import { ILogger, Logger } from "logger-flx";
 import { Middleware, IMiddleware } from "koa-ts-decorators";
 import { Catalog } from "di-ts-decorators";
 import { IApiServerConfig } from "../interfaces";

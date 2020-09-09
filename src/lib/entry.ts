@@ -7,8 +7,10 @@ import * as Ajv from "ajv";
 import jtomler from "jtomler";
 import json_from_schema from "json-from-default-schema";
 import * as auth_user_schema from "./schemes/auth_user.json";
+import * as git_store_source_schema from "./schemes/git_store_source.json";
 import * as config_schema from "./schemes/config.json";
 import { IAppConfig } from "./config.interface";
+import { IStoreSourceGitConfig } from "./store";
  
 const pkg = finder(__dirname).next().value;
 
@@ -45,6 +47,34 @@ for (const item of config.authorization.users) {
         console.error(chalk.red(`[ERROR] Config authorization.users parsing error. Schema errors:\n${JSON.stringify(validate_user_item.errors, null, 2)}`));
         process.exit(1);
     }
+
+}
+
+let index = 0;
+
+for (const item of config.store.sources) {
+
+    if (typeof item.type !== "string") {
+        throw new Error("Config parsing error. Store \"source.type\" type must be string");
+    }
+
+    const ajv_item = new Ajv();
+
+    let validate_item;
+
+    if (item.type === "git") {
+        config.store.sources[index] = <IStoreSourceGitConfig>json_from_schema(item, git_store_source_schema);
+        validate_item = ajv_item.compile(git_store_source_schema);
+    }
+
+    const valid = validate_item(item);
+
+    if (!valid) {
+        console.error(chalk.red(`[ERROR] Config store.source parsing error. Schema errors:\n${JSON.stringify(validate_item.errors, null, 2)}`));
+        process.exit(1);
+    }
+
+    index++;
 
 }
 

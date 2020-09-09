@@ -1,4 +1,4 @@
-import { ILogger, Logger } from "../../lib/logger";
+import { ILogger, Logger } from "logger-flx";
 import { Middleware, IMiddleware, Context, Next } from "koa-ts-decorators";
 import { Catalog } from "di-ts-decorators";
 
@@ -41,7 +41,7 @@ export class Errors implements IMiddleware {
             } catch (error) {
         
                 this._logger.error(`Server Error: ${error.message}`, "prod");
-                this._logger.red(error.stack, "debug");
+                this._logger.log(error.stack, "debug");
         
                 if (ctx.is("application/json") || ctx.is("json")) {
         
