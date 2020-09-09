@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 #ENV APP_RESTARTER "true"
 ENV APP_RESTARTER_VERSION 0.0.7
-ENV APP_NAME "app-template"
+ENV APP_NAME "http-config-server"
 
 RUN apt-get update && \
     apt-get install -y curl bash && \
@@ -30,10 +30,7 @@ RUN chmod +x /start && \
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/bin/bash", "/start"]
 
-COPY package.json /${APP_NAME}/package.json
-COPY package-lock.json /${APP_NAME}/package-lock.json
-COPY app.js /${APP_NAME}/app.js
-COPY docker-healthcheck.js /${APP_NAME}/docker-healthcheck.js
+COPY app /${APP_NAME}
 COPY config.toml /${APP_NAME}/config.toml
 
 
