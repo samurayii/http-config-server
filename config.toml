@@ -20,8 +20,8 @@
         keys = ["keys.json"]
         namespace = "configs"
         type = "git"
-        include_regexp = "\\.(json|yml|toml)"
-        exclude_regexp = "\\.git"
+        include_regexp = "\\.(json|yml|toml)$"
+        exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"
         [store.sources.git]
             commit_count = 10
             repository = "https://user:password@server:3000/repository.git"

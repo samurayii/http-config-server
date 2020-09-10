@@ -8,3 +8,4 @@ Thumbs.db
 docker-build/app
 docker-build/package.json
 !docker-build/config.toml
+tests/unit/store_tmp

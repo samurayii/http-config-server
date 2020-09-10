@@ -25,13 +25,18 @@
         },
         "exclude_regexp": {
             "type": "string",
-            "default": "\\.git",
+            "default": "(.*\\/\\.git.*|.*\\\\.git.*)",
             "minLength": 1,
             "maxLength": 256
         },
         "git": {
             "type": "object",
             "properties": {
+                "interval": {
+                    "type": "integer",
+                    "default": 10,
+                    "minimum": 1
+                },
                 "commit_count": {
                     "type": "integer",
                     "default": 10,

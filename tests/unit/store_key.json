@@ -1,0 +1,10 @@
+{
+    "key1": "key1-val",
+    "key2": true,
+    "key3": [],
+    "key4": 123,
+    "key5": {
+        "sub-key5": "hello"    
+    },
+    "key6": "${TERM_PROGRAM}"
+}
