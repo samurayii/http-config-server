@@ -21,7 +21,7 @@
 | v1/store/get/${namespace}/${path} | GET | 200 | получить файл по пути | [пример](#v1_store_get) |
 | v1/store/keys | GET | 200 | получить список переменых сервера | [пример](#v1_store_keys) |
 | v1/store/namespaces | GET | 200 | получить список пространств имён | [пример](#v1_store_namespaces) |
-| v1/store/hashes | POST | 200 | получить список хешей для списка файлов | [пример](#/v1_store_hashes) |
+| v1/store/hashes | POST | 200 | получить список хешей для списка файлов | [пример](#v1_store_hashes) |
 
 ## Примеры ответов/запросов
 
