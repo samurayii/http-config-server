@@ -1,3 +1,3 @@
-# Template app.
+# Http config server
 
-template. [Документация](docs/README.md)
+Сервер центральной системы конфигурации. [Документация](docs/README.md)
