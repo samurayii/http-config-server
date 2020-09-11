@@ -9,12 +9,13 @@
 
 [api]
     enable = true
-    auth = true
+    auth = false
     env = "development"
+    [api.parsing]
+        enable = true
 
 [store]
-    keys = ["keys.json", "key_folder"]
-    default_namespace = "configs"
+    keys = []
     tmp = "tmp"
     [[store.sources]]
         keys = ["keys.json"]
@@ -23,6 +24,7 @@
         include_regexp = "\\.(json|yml|toml)$"
         exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"
         [store.sources.git]
+            interval = 10
             commit_count = 10
             repository = "https://user:password@server:3000/repository.git"
             branch = "master"

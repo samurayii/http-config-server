@@ -16,7 +16,6 @@ export interface IStoreSourceGitConfig {
 
 export interface IStoreConfig {
     keys: string[]
-    default_namespace: string
     tmp: string
     sources: Array<IStoreSourceGitConfig>
 }
@@ -28,9 +27,13 @@ export interface IStoreKeys {
 export interface IStore extends EventEmitter {
     run: () => void
     stop: () => void
+    getFile: (file_path: string, namespace_name: string) => Promise<string>
+    getList: (folder_path: string, namespace_name: string) => string[]
+    getHash: (file_path: string, namespace_name: string) => string
     readonly keys: {
         [key: string]: string
     }
+    readonly namespaces: string[]
 }
 
 export interface IStoreSource extends EventEmitter {

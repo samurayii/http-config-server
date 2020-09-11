@@ -22,6 +22,19 @@
     ips_count = 0                       # максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность)
     env = "development"                 # среда для сервера koa
     #keys = []                          # массив подписанных ключей cookie
+    [api.parsing]                       # настройка парсинга (пакет: https://github.com/dlau/koa-body#readme)
+        enable = true                   # активация парсинга
+        encoding = "utf-8"              # кодировка парсинга
+        form_limit = "56kb"             # лимит для форм
+        json_limit = "1mb"              # лимит для json
+        text_limit = "1mb"              # лимит для raw
+        text = true                     # парсинг raw
+        json = true                     # парсинг json
+        multipart = false               # парсинг составных частей
+        include_unparsed = false        # добавить исходное тело запроса в переменную ctx.request.body
+        urlencoded = true               # парсинг данных urlencoded
+        json_strict = true              # строгий режим парсинга json
+        methods = ["POST"]              # список методов для парсинга
 
 [docker_healthcheck]    # настрока провеки здоровя для контейнера (утилита docker-healthcheck)
     enable = false      # активация
@@ -29,7 +42,6 @@
 
 [store]                                     # настройка хранилища
     keys = ["keys.json", "key_folder"]      # пути к файлам ключей сервера
-    default_namespace = "configs"           # пространство имён по умолчанию
     tmp = "tmp"                             # временная папка
     [[sources]]                                 # массив источников данных
         keys = ["keys.json"]                    # пути к файлам ключей простанства имён
@@ -38,7 +50,7 @@
         include_regexp = "\\.(json|yml|toml)$"           # regexp для файлов вхождения
         exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"  # regexp для файлов исключения
         [sources.git]                                                           # настройка git репозитория
-            interval = 10                                                       # интервал опроса в секундах
+            interval = 20                                                       # интервал опроса в секундах
             commit_count = 10                                                   # максимальное количество коммитов
             repository = "https://user:password@server:3000/repository.git"     # репозиторий
             branch = "master"                                                   # ветка

@@ -126,6 +126,8 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
 
             this._logger.log(`[Store:${this._config.namespace}] Scanning...`, "dev");
 
+            this.emit("change", this._config.namespace);
+
             this._loadKeys();
 
             const files = fs.readdirSync(this._tmp_folder);
@@ -162,7 +164,7 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
 
             const key = this._keys[key_name];
             const reg_namespace = new RegExp(`<<${key_name}>>`, "gi");
-            const reg_default = new RegExp(`<<${key_name.replace(`${this._config.namespace}/`, "")}>>`, "gi");
+            const reg_default = new RegExp(`<<${key_name.replace(`${this._config.namespace}.`, "")}>>`, "gi");
 
             body = body.replace(reg_namespace, key);
             body = body.replace(reg_default, key);
@@ -217,9 +219,9 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
                 }
 
                 if (prefix !== undefined) {
-                    this._keys[`${this._config.namespace}/${prefix}/${key_name}`] = value;
+                    this._keys[`${this._config.namespace}.${prefix}.${key_name}`] = value;
                 } else {
-                    this._keys[`${this._config.namespace}/${key_name}`] = value;
+                    this._keys[`${this._config.namespace}.${key_name}`] = value;
                 }
 
             }
@@ -242,7 +244,7 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
             const stat = fs.statSync(full_key_path);
 
             if (stat.isDirectory()) {
-                this._loadKeysFolder(full_key_path, `${prefix}/${path.basename(full_key_path)}`);
+                this._loadKeysFolder(full_key_path, `${prefix}.${path.basename(full_key_path)}`);
             } else {
                 this._loadKeysFile(full_key_path, prefix);
             }
@@ -272,6 +274,8 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
 
         }
 
+        this.emit("keys", this._keys, this._config.namespace);
+
     }
 
     private _syncFile (file_path: string): void {
@@ -298,7 +302,7 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
 
     private _syncDirectory (folder_path: string): void {
 
-        this._logger.log(`Scanning ${folder_path} folder`, "dev");
+        this._logger.log(`[Store:${this._config.namespace}] Scanning ${folder_path} folder`, "dev");
 
         const files = fs.readdirSync(folder_path);
 

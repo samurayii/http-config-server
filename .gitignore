@@ -9,3 +9,7 @@ docker-build/app
 docker-build/package.json
 !docker-build/config.toml
 tests/unit/store_tmp
+tests/e2e/config.toml
+tests/e2e/tmp
+tmp
+run_for_test.txt

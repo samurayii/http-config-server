@@ -15,7 +15,7 @@
                 "timestamp": {
                     "type": "string",
                     "default": "time",
-                    "env": "TEMPLATE_LOGGER_TIMESTAMP",
+                    "env": "CONFIG_SERVER_LOGGER_TIMESTAMP",
                     "enum": ["none", "time", "full"]
                 },
                 "type": {
@@ -127,6 +127,110 @@
                         "minLength": 1
                     },
                     "minItems": 1
+                },
+                "parsing": {
+                    "type": "object",
+                    "default": {},
+                    "env": "CONFIG_SERVER_API_PARSING",
+                    "properties": {
+                        "enable": {
+                            "type": "boolean",
+                            "default": true,
+                            "env": "CONFIG_SERVER_API_PARSING_ENABLE",
+                            "enum": [true, false]
+                        },
+                        "encoding": {
+                            "type": "string",
+                            "default": "utf-8",
+                            "env": "CONFIG_SERVER_API_PARSING_ENCODING",
+                            "minLength": 1,
+                            "maxLength": 32
+                        },
+                        "form_limit": {
+                            "type": "string",
+                            "default": "56kb",
+                            "env": "CONFIG_SERVER_API_PARSING_FORM_LIMIT",
+                            "minLength": 1,
+                            "maxLength": 16,
+                            "pattern": "^[0-9]{1,3}(kb|mb)$"
+                        },
+                        "json_limit": {
+                            "type": "string",
+                            "default": "1mb",
+                            "env": "CONFIG_SERVER_API_PARSING_JSON_LIMIT",
+                            "minLength": 1,
+                            "maxLength": 16,
+                            "pattern": "^[0-9]{1,3}(kb|mb)$"
+                        },
+                        "text_limit": {
+                            "type": "string",
+                            "default": "1mb",
+                            "env": "CONFIG_SERVER_API_PARSING_TEXT_LIMIT",
+                            "minLength": 1,
+                            "maxLength": 16,
+                            "pattern": "^[0-9]{1,3}(kb|mb)$"
+                        },
+                        "text": {
+                            "type": "boolean",
+                            "default": true,
+                            "env": "CONFIG_SERVER_API_PARSING_TEXT",
+                            "enum": [true, false]
+                        },
+                        "json": {
+                            "type": "boolean",
+                            "default": true,
+                            "env": "CONFIG_SERVER_API_PARSING_JSON",
+                            "enum": [true, false]
+                        },
+                        "multipart": {
+                            "type": "boolean",
+                            "default": false,
+                            "env": "CONFIG_SERVER_API_PARSING_MULTIPART",
+                            "enum": [true, false]
+                        },
+                        "include_unparsed": {
+                            "type": "boolean",
+                            "default": false,
+                            "env": "CONFIG_SERVER_API_PARSING_INCLUDE_UNPARSED",
+                            "enum": [true, false]
+                        },
+                        "urlencoded": {
+                            "type": "boolean",
+                            "default": true,
+                            "env": "CONFIG_SERVER_API_PARSING_URLENCODED",
+                            "enum": [true, false]
+                        },
+                        "json_strict": {
+                            "type": "boolean",
+                            "default": true,
+                            "env": "CONFIG_SERVER_API_PARSING_JSON_STRICT",
+                            "enum": [true, false]
+                        },
+                        "methods": {
+                            "type": "array",
+                            "default": ["POST"],
+                            "env": "CONFIG_SERVER_API_PARSING_METHODS",
+                            "items": {
+                                "type": "string",
+                                "enum": ["POST","PUT","PATCH"]
+                            },
+                            "minItems": 1
+                        }
+                    },
+                    "required": [
+                        "enable",
+                        "encoding",
+                        "form_limit",
+                        "json_limit",
+                        "text_limit",
+                        "text",
+                        "json",
+                        "multipart",
+                        "include_unparsed",
+                        "urlencoded",
+                        "json_strict",
+                        "methods"
+                    ]
                 }
             },
             "required": [
@@ -138,7 +242,8 @@
                 "subdomain_offset",
                 "proxy_header",
                 "ips_count",
-                "env"
+                "env",
+                "parsing"
             ]
         },
         "docker_healthcheck": {
@@ -175,13 +280,6 @@
                     "env": "CONFIG_SERVER_STORE_KEYS",
                     "minItems": 0
                 },
-                "default_namespace": {
-                    "type": "string",
-                    "default": "configs",
-                    "env": "CONFIG_SERVER_STORE_DEFAULT_NAMESPACE",
-                    "minLength": 1,
-                    "maxLength": 64
-                },
                 "tmp": {
                     "type": "string",
                     "default": "tmp",
@@ -209,7 +307,6 @@
             },
             "required": [
                 "keys",
-                "default_namespace",
                 "tmp",
                 "sources"
             ]

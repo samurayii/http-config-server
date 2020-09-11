@@ -5,7 +5,7 @@ ENV APP_RESTARTER_VERSION 0.0.7
 ENV APP_NAME "http-config-server"
 
 RUN apt-get update && \
-    apt-get install -y curl bash && \
+    apt-get install -y curl bash git && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash && \
     apt-get install -y nodejs && \
     node -v && \
@@ -31,6 +31,8 @@ ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/bin/bash", "/start"]
 
 COPY app /${APP_NAME}
+COPY env.js /env.js
+COPY keys.json /keys.json
 COPY config.toml /${APP_NAME}/config.toml
 
 

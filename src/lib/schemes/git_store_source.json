@@ -34,7 +34,7 @@
             "properties": {
                 "interval": {
                     "type": "integer",
-                    "default": 10,
+                    "default": 20,
                     "minimum": 1
                 },
                 "commit_count": {

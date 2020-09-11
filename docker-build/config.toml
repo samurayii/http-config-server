@@ -1,9 +1,12 @@
 [logger]
     mode = "prod"
-    enable = true
-    timestamp = true
-    type = true
+    timestamp = "none"
 
 [api]
     enable = true
+    auth = false
     env = "production"
+
+[store]
+    keys = ["/keys.json"]
+    tmp = "tmp"

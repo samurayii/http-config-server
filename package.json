@@ -1,6 +1,6 @@
 {
     "name": "http-config-server",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "description": "Centralized configuration server.",
     "main": "app.js",
     "docker_image": "samuray/http-config-server",
@@ -72,6 +72,7 @@
         "commander": "^6.1.0",
         "di-ts-decorators": "0.0.3",
         "find-package-json": "^1.2.0",
+        "handlebars": "^4.7.6",
         "json-from-default-schema": "^0.1.4",
         "jtomler": "^0.1.5",
         "koa-body": "^4.2.0",

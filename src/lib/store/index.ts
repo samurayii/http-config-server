@@ -13,6 +13,13 @@ import * as path from "path";
 import { sync as sync_del } from "rimraf";
 import jtomler from "jtomler";
 import * as crypto from "crypto";
+import Handlebars from "handlebars";
+
+const fsPromises = fs.promises;
+
+type TJson = {
+    [key: string]: TJson | unknown
+}
 
 export * from "./interfaces";
 
@@ -21,7 +28,9 @@ export class Store extends EventEmitter implements IStore {
     private readonly _sources_list: {
         [key: string]: IStoreSource
     }
-    private readonly _keys: IStoreKeys
+    private readonly _server_keys: IStoreKeys
+    private _result_keys: IStoreKeys
+    private _template_keys: TJson
     private readonly _store_folder: string
     private _store_data: {
         [key: string]: {
@@ -37,7 +46,9 @@ export class Store extends EventEmitter implements IStore {
         super();
 
         this._sources_list = {};
-        this._keys = {};
+        this._server_keys = {};
+        this._result_keys = {};
+        this._template_keys = {};
         this._store_data = {};
         
         const tmp_folder = path.resolve(process.cwd(), this._config.tmp);
@@ -88,9 +99,37 @@ export class Store extends EventEmitter implements IStore {
                 delete this._store_data[source.namespace][file_path];
             });
 
+            source.on("change", () => {
+                this._store_data[source.namespace] = {};
+            });
+
+            source.on("keys", () => {
+
+                let result = {
+                    ...this._server_keys
+                };
+        
+                for (const source_name in this._sources_list) {
+                    const source = this._sources_list[source_name];
+                    result = {
+                        ...result,
+                        ...source.keys
+                    };
+                }
+        
+                this._result_keys = result;
+
+                this._parseTemplateKeys();
+
+            });
+
             source.on("add", (file_path, body) => {
 
                 body = this._parseKeys(body);
+
+                const template = Handlebars.compile(body);
+
+                body = template(this._template_keys);
 
                 const hash = crypto.createHash("md5").update(body).digest("hex");
                 const full_file_path = path.resolve(namespace_folder, file_path);
@@ -104,7 +143,7 @@ export class Store extends EventEmitter implements IStore {
 
                 fs.writeFileSync(full_file_path, body);
 
-                this._store_data[source.namespace][file_path] = hash;
+                this._store_data[source.namespace][file_path.replace(/(\\|\\\\)/ig, "/")] = hash;
 
             });
 
@@ -112,11 +151,48 @@ export class Store extends EventEmitter implements IStore {
 
     }
 
+    private _parseTemplateKeys (): void {
+
+        type TJson = {
+            [key: string]: TJson | string
+        }
+        
+        const result: TJson = {};
+
+        for (const key in this._result_keys) {
+
+            const path_keys = key.split(".");
+            let element: TJson = result;
+
+            let i = 1;
+
+            for (const element_key of path_keys) {
+                
+                if (element[element_key] === undefined) {
+                    element[element_key] = {};
+                }
+
+                if (i < path_keys.length) {
+                    element = <TJson>element[element_key];
+                } else {
+                    element[element_key] = this._result_keys[key];
+                }
+
+                ++i;
+                
+            }
+
+        }
+
+        this._template_keys = result;
+
+    }
+
     private _parseKeys (body: string): string {
 
-        for (const key_name in this._keys) {
+        for (const key_name in this._server_keys) {
 
-            const key = this._keys[key_name];
+            const key = this._server_keys[key_name];
             const reg = new RegExp(`<<${key_name}>>`, "gi");
 
             body = body.replace(reg, key);
@@ -169,9 +245,9 @@ export class Store extends EventEmitter implements IStore {
                 }
 
                 if (prefix !== undefined) {
-                    this._keys[`server/${prefix}/${key_name}`] = value;
+                    this._server_keys[`server.${prefix}.${key_name}`] = value;
                 } else {
-                    this._keys[`server/${key_name}`] = value;
+                    this._server_keys[`server.${key_name}`] = value;
                 }
 
             }
@@ -194,7 +270,7 @@ export class Store extends EventEmitter implements IStore {
             const stat = fs.statSync(full_key_path);
 
             if (stat.isDirectory()) {
-                this._loadKeysFolder(full_key_path, `${prefix}/${path.basename(full_key_path)}`);
+                this._loadKeysFolder(full_key_path, `${prefix}.${path.basename(full_key_path)}`);
             } else {
                 this._loadKeysFile(full_key_path, prefix);
             }
@@ -241,20 +317,93 @@ export class Store extends EventEmitter implements IStore {
     }
 
     get keys (): IStoreKeys {
+        return this._result_keys; 
+    }
 
-        let result = {
-            ...this._keys
-        };
+    get namespaces (): string[] {
 
-        for (const source_name in this._sources_list) {
-            const source = this._sources_list[source_name];
-            result = {
-                ...result,
-                ...source.keys
-            };
+        const result = [];
+
+        for (const namespace_name in this._sources_list) {
+            result.push(namespace_name);
         }
 
-        return result; 
+        return result;
+    }
+
+    getHash (file_path: string, namespace_name: string): string {
+
+        if (this._sources_list[namespace_name] === undefined) {
+            return;
+        }
+
+        const namespace = this._store_data[namespace_name];
+
+        if (namespace[file_path] === undefined) {
+            return;
+        }
+
+        return namespace[file_path];
+
+    }
+
+    getFile (file_path: string, namespace_name: string): Promise<string> {
+        return new Promise( async (resolve) => {
+
+            if (this._sources_list[namespace_name] === undefined) {
+                return resolve();
+            }
+
+            const namespace = this._store_data[namespace_name];
+
+            if (namespace[file_path] === undefined) {
+                return resolve();
+            }
+
+            const namespace_folder = path.resolve(this._store_folder, namespace_name);
+            const full_file_path = path.resolve(namespace_folder, file_path);
+
+            try {
+                
+                await fsPromises.access(full_file_path, fs.constants.R_OK);
+
+                const body = await fsPromises.readFile(full_file_path);
+
+                return resolve(body.toString());
+
+            } catch (error) {
+                this._logger.error(`[Store] Can not access to file ${full_file_path}. ${error.message}`);
+                this._logger.log(error.stack, "debug");
+                return resolve();
+            }
+
+        });
+    }
+
+    getList (file_path: string, namespace_name: string): string[] {
+
+        if (this._sources_list[namespace_name] === undefined) {
+            return [];
+        }
+
+        const namespace = this._store_data[namespace_name];
+
+        if (namespace[file_path] !== undefined) {
+            return [
+                `${namespace_name}/${file_path}`
+            ];
+        }
+
+        const result: string[] = [];
+
+        for (const testing_file in namespace) {
+            if (testing_file.includes(file_path)) {
+                result.push(`${namespace_name}/${testing_file}`);
+            }
+        }
+
+        return result;
+
     }
 
 }
