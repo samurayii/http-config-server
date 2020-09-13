@@ -66,6 +66,8 @@ export class Store extends EventEmitter implements IStore {
 
         this._loadKeys();
 
+        this._calcResultKey();
+
         for (const source of this._config.sources) {
 
             if (this._sources_list[source.namespace] !== undefined) {
@@ -104,23 +106,7 @@ export class Store extends EventEmitter implements IStore {
             });
 
             source.on("keys", () => {
-
-                let result = {
-                    ...this._server_keys
-                };
-        
-                for (const source_name in this._sources_list) {
-                    const source = this._sources_list[source_name];
-                    result = {
-                        ...result,
-                        ...source.keys
-                    };
-                }
-        
-                this._result_keys = result;
-
-                this._parseTemplateKeys();
-
+                this._calcResultKey();
             });
 
             source.on("add", (file_path, body) => {
@@ -148,6 +134,26 @@ export class Store extends EventEmitter implements IStore {
             });
 
         }
+
+    }
+
+    private _calcResultKey (): void {
+        
+        let result = {
+            ...this._server_keys
+        };
+
+        for (const source_name in this._sources_list) {
+            const source = this._sources_list[source_name];
+            result = {
+                ...result,
+                ...source.keys
+            };
+        }
+
+        this._result_keys = result;
+
+        this._parseTemplateKeys();
 
     }
 
@@ -207,6 +213,8 @@ export class Store extends EventEmitter implements IStore {
         try {
         
             let keys_file_text = fs.readFileSync(key_path).toString();
+
+            this._logger.log(`[Store] Loading key file ${key_path}`, "dev");
     
             for (const env_name in process.env) {
     
@@ -217,7 +225,7 @@ export class Store extends EventEmitter implements IStore {
             }
             
             const keys_file_json = <IStoreKeys>jtomler(keys_file_text, false);
-    
+ 
             for (const key_name in keys_file_json) {
     
                 let value = keys_file_json[key_name];

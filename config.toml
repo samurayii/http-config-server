@@ -15,7 +15,7 @@
         enable = true
 
 [store]
-    keys = []
+    keys = ["keys.json"]
     tmp = "tmp"
     [[store.sources]]
         keys = ["keys.json"]
