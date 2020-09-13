@@ -9,6 +9,7 @@
 - [Установка](#install)
 - [Ключи запуска](#launch)
 - [Конфигурация](#configuration)
+- [Источники](SOURCES.md)
 - [HTTP API](API.md)
 
 ## <a name="install"></a> Установка и использование
@@ -33,6 +34,8 @@
 - **api** - настройка API (переменная среды: CONFIG_SERVER_API)
 - **api.parsing** - настройка парсинга (пакет: https://github.com/dlau/koa-body#readme, переменная среды: CONFIG_SERVER_API_PARSING)
 - **docker_healthcheck** - настрока провеки здоровя для контейнера (переменная среды: CONFIG_SERVER_DOCKER_HEALTHCHECK)
+- **store** - настройка хранилища (переменная среды: CONFIG_SERVER_STORE)
+- **store.sources** - массив настроек для источников. [источники](SOURCES.md) (переменная среды: CONFIG_SERVER_STORE_SOURCES)
 
 ### Пример файла конфигурации config.toml
 
@@ -82,13 +85,13 @@
 [store]                                     # настройка хранилища
     keys = ["keys.json", "key_folder"]      # пути к файлам ключей сервера
     tmp = "tmp"                             # временная папка
-    [[sources]]                                 # массив источников данных
+    [[store.sources]]                           # массив источников данных
         keys = ["keys.json"]                    # пути к файлам ключей простанства имён
         namespace = "configs"                   # имя пространства имён (должно быть уникально)
         type = "git"                            # тип источника данных
         include_regexp = "\\.(json|yml|toml)$"           # regexp для файлов вхождения
         exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"  # regexp для файлов исключения
-        [sources.git]                                                           # настройка git репозитория
+        [store.sources.git]                                                     # настройка git репозитория
             interval = 20                                                       # интервал опроса в секундах
             commit_count = 10                                                   # максимальное количество коммитов
             repository = "https://user:password@server:3000/repository.git"     # репозиторий
@@ -104,42 +107,46 @@
         enable = true
 ```
 
+### Настройка через переменные среды
+
+Ключи конфигурации можно задать через переменные среды ОС. Имя переменной среды формируется из двух частей, префикса `CONFIG_SERVER_` и имени переменной в верхнем реестре. Если переменная вложена, то это обозначается символом `_`. Переменные среды имеют высший приоритет.
+
+пример для переменной **logger.mode**: `CONFIG_SERVER_LOGGER_MODE`
+
+пример для переменной **api.ips_count**: `CONFIG_SERVER_API_IPS_COUNT`
+
 ### Таблица параметров конфигурации
 
-| Параметр | Переменая среды | Тип | Значение | Описание |
-| ----- | ----- | ----- | ----- | ----- |
-| logger.mode | CONFIG_SERVER_LOGGER_MODE | строка | prod | режим отображения prod, dev или debug |
-| logger.enable | CONFIG_SERVER_LOGGER_ENABLE | логический | true | активация логгера |
-| logger.timestamp | CONFIG_SERVER_LOGGER_TIMESTAMP | логический | false | выводить время лога (true или false) |
-| logger.type | CONFIG_SERVER_LOGGER_TYPE | логический | true | выводить тип лога (true или false) |
-| authorization.users | CONFIG_SERVER_AUTHORIZATION_USERS | массив | [] | массив пользователей |
-| api.enable | CONFIG_SERVER_API_ENABLE | логический | false | активация API (true или false) |
-| api.auth | CONFIG_SERVER_API_AUTH | логический | false | активация авторизации (true или false) |
-| api.listening | CONFIG_SERVER_API_LISTENING | строка | *:3001 | настройка слушателя, формат <хост>:<порт> |
-| api.prefix | CONFIG_SERVER_API_PREFIX | строка | /api | префикс |
-| api.proxy | CONFIG_SERVER_API_PROXY | логический | false | когда поле заголовка true proxy будут доверенным |
-| api.subdomain_offset | CONFIG_SERVER_API_SUBDOMAIN_OFFSET | число | 2 | смещение от поддомена для игнорирования |
-| api.proxy_header | CONFIG_SERVER_API_PROXY_HEADER | строка | X-Forwarded-For | заголовок IP прокси |
-| api.ips_count | CONFIG_SERVER_API_IPS_COUNT | число | 0 | максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность) |
-| api.env | CONFIG_SERVER_API_ENV | строка | development | среда для сервера [koa](https://www.npmjs.com/package/koa) |
-| api.keys | CONFIG_SERVER_API_KEYS | строка[] |  | массив подписанных ключей cookie |
-| api.parsing.enable | CONFIG_SERVER_API_PARSING_ENABLE | логический | false | активация парсинга (true или false) |
-| api.parsing.encoding | CONFIG_SERVER_API_PARSING_ENCODING | строка | utf-8 | кодировка парсинга |
-| api.parsing.form_limit | CONFIG_SERVER_API_PARSING_FORM_LIMIT | строка | 56kb | лимит для форм |
-| api.parsing.json_limit | CONFIG_SERVER_API_PARSING_JSON_LIMIT | строка | 1mb | лимит для json |
-| api.parsing.text_limit | CONFIG_SERVER_API_PARSING_TEXT_LIMIT | строка | 1mb | лимит для raw |
-| api.parsing.text | CONFIG_SERVER_API_PARSING_TEXT | логический | true | парсинг raw |
-| api.parsing.json | CONFIG_SERVER_API_PARSING_JSON | логический | true | парсинг json |
-| api.parsing.multipart | CONFIG_SERVER_API_PARSING_MULTIPART | логический | false | парсинг составных частей |
-| api.parsing.include_unparsed | CONFIG_SERVER_API_PARSING_INCLUDE_UNPARSED | логический | false | добавить исходное тело запроса в переменную ctx.request.body |
-| api.parsing.urlencoded | CONFIG_SERVER_API_PARSING_URLENCODED | логический | true | парсинг данных urlencoded |
-| api.parsing.json_strict | CONFIG_SERVER_API_PARSING_JSON_STRICT | логический | true | строгий режим парсинга json |
-| api.parsing.methods | CONFIG_SERVER_API_PARSING_METHODS | строка[] | ["POST"] | список методов для парсинга POST, PUT и/или PATCH |
-| docke_healthcheck.enable | CONFIG_SERVER_DOCKER_HEALTHCHECK_ENABLE | логический | false | активация |
-| docke_healthcheck.timeout | CONFIG_SERVER_DOCKER_HEALTHCHECK_TIMEOUT | число | 10 | время ожидания в секундах |
-
-
-
-
-
-
+| Параметр | Тип | Значение | Описание |
+| ----- | ----- | ----- | ----- |
+| logger.mode | строка | prod | режим отображения prod, dev или debug |
+| logger.enable | логический | true | активация логгера |
+| logger.timestamp | логический | false | выводить время лога (true или false) |
+| logger.type | логический | true | выводить тип лога (true или false) |
+| authorization.users | массив | [] | массив пользователей |
+| api.enable | false | активация API (true или false) |
+| api.auth | false | активация авторизации (true или false) |
+| api.listening | строка | *:3001 | настройка слушателя, формат <хост>:<порт> |
+| api.prefix | строка | /api | префикс |
+| api.proxy | логический | false | когда поле заголовка true proxy будут доверенным |
+| api.subdomain_offset | число | 2 | смещение от поддомена для игнорирования |
+| api.proxy_header | строка | X-Forwarded-For | заголовок IP прокси |
+| api.ips_count | число | 0 | максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность) |
+| api.env | строка | development | среда для сервера [koa](https://www.npmjs.com/package/koa) |
+| api.keys | строка[] |  | массив подписанных ключей cookie |
+| api.parsing.enable | логический | false | активация парсинга (true или false) |
+| api.parsing.encoding | строка | utf-8 | кодировка парсинга |
+| api.parsing.form_limit | строка | 56kb | лимит для форм |
+| api.parsing.json_limit | строка | 1mb | лимит для json |
+| api.parsing.text_limit | строка | 1mb | лимит для raw |
+| api.parsing.text | логический | true | парсинг raw |
+| api.parsing.json | логический | true | парсинг json |
+| api.parsing.multipart | логический | false | парсинг составных частей |
+| api.parsing.include_unparsed | логический | false | добавить исходное тело запроса в переменную ctx.request.body |
+| api.parsing.urlencoded | логический | true | парсинг данных urlencoded |
+| api.parsing.json_strict | логический | true | строгий режим парсинга json |
+| api.parsing.methods | строка[] | ["POST"] | список методов для парсинга POST, PUT и/или PATCH |
+| docke_healthcheck.enable | логический | false | активация |
+| docke_healthcheck.timeout | число | 10 | время ожидания в секундах |
+| store.keys | массив | [] | пути к файлам ключей сервера |
+| store.tmp | строка | tmp | временная папка |
