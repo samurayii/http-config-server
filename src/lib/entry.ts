@@ -40,11 +40,11 @@ const config: IAppConfig = <IAppConfig>json_from_schema(jtomler(full_config_path
 
 for (const item of config.authorization.users) {
 
-    const ajv_user_item = new Ajv();
-    const validate_user_item = ajv_user_item.compile(auth_user_schema);
+    const ajv_item = new Ajv();
+    const validate_item = ajv_item.compile(auth_user_schema);
 
-    if (!validate_user_item(item)) {
-        console.error(chalk.red(`[ERROR] Config authorization.users parsing error. Schema errors:\n${JSON.stringify(validate_user_item.errors, null, 2)}`));
+    if (!validate_item(item)) {
+        console.error(chalk.red(`[ERROR] Config authorization.users parsing error. Schema errors:\n${JSON.stringify(validate_item.errors, null, 2)}`));
         process.exit(1);
     }
 
