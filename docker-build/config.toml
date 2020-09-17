@@ -8,5 +8,5 @@
     env = "production"
 
 [store]
-    keys = ["/keys.json"]
+    keys = ["/keys"]
     tmp = "tmp"
