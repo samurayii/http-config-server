@@ -41,7 +41,11 @@ export class RouteStore {
 
         ctx.body = { 
             status: "success",
-            data: result
+            data: {
+                namespace: namespace_name,
+                path: file_path,
+                list: result
+            }
         };
         
         ctx.status = 200;
@@ -92,7 +96,11 @@ export class RouteStore {
         } else {
             ctx.body = { 
                 status: "success",
-                data: result
+                data: {
+                    namespace: namespace_name,
+                    path: file_path,
+                    hash: result
+                }
             };
         }
 
@@ -122,11 +130,13 @@ export class RouteStore {
 
             if (hash === undefined) {
                 result.push({
+                    namespace: namespace_name,
                     exist: false,
                     file: file_path
                 });
             } else {
                 result.push({
+                    namespace: namespace_name,
                     exist: true,
                     file: file_path,
                     hash: hash
@@ -160,7 +170,11 @@ export class RouteStore {
         } else {
             ctx.body = { 
                 status: "success",
-                data: result
+                data: {
+                    namespace: namespace_name,
+                    path: file_path,
+                    body: result
+                }
             };
         }
         

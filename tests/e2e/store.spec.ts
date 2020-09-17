@@ -10,8 +10,9 @@ describe("Store", function () {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an("object");
         expect(response.body.status).equal("success");
-        expect(response.body.data).to.be.an("array");
-        expect(response.body.data.length).equal(1);
+        expect(response.body.data).to.be.an("object");
+        expect(response.body.data.list).to.be.an("array");
+        expect(response.body.data.list.length).equal(1);
 
     });
 
@@ -22,8 +23,9 @@ describe("Store", function () {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an("object");
         expect(response.body.status).equal("success");
-        expect(response.body.data).to.be.an("array");
-        expect(response.body.data.length).equal(2);
+        expect(response.body.data).to.be.an("object");
+        expect(response.body.data.list).to.be.an("array");
+        expect(response.body.data.list.length).equal(2);
 
     });
 
@@ -34,7 +36,7 @@ describe("Store", function () {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an("object");
         expect(response.body.status).equal("success");
-        expect(response.body.data).to.be.an("string");
+        expect(response.body.data).to.be.an("object");
 
     });
 
@@ -45,7 +47,8 @@ describe("Store", function () {
         expect(response.status).to.equal(200);
         expect(response.body).to.be.an("object");
         expect(response.body.status).equal("success");
-        expect(response.body.data).to.be.an("string");
+        expect(response.body.data).to.be.an("object");
+        expect(response.body.data.body).to.be.an("string");
 
     });
 

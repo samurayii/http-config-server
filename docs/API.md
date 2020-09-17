@@ -53,10 +53,14 @@
 ```js
 {
     "status": "success",
-    "data": [
-        "asd/asda/asdad1.json",
-        "asd/asda/asdad2.json",
-    ]
+    "data": {
+        "namespace": "asdad",
+        "path": "/asdasd/asd",
+        "list": [
+            "asd/asda/asdad1.json",
+            "asd/asda/asdad2.json",
+        ]
+    }
 }
 ```
 
@@ -66,7 +70,11 @@
 ```js
 {
     "status": "success",
-    "data": "asdadasdadsadsad"
+    "data": {
+        "namespace": "asdad",
+        "path": "/asdasd/asd",
+        "hash": "asdasdasdad"
+    }
 }
 ```
 
@@ -76,7 +84,11 @@
 ```js
 {
     "status": "success",
-    "data": "тело документа"
+    "data": {
+        "namespace": "asdad",
+        "path": "/asdasd/asd",
+        "body": "asdasdas"
+    }
 }
 ```
 
@@ -119,11 +131,13 @@
     "status": "success",
     "data": [
         {
+            "namespace": "adsdasda",
             "exist": true,
             "file": "git1/app1/config.json",
             "hash": "f5ece0438de049ff6898c69c0a9d68e8"
         },
         {
+            "namespace": "adsdasda",
             "exist": false,
             "file": "git1/app1/config.json"
         }

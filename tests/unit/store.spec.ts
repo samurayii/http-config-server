@@ -6,7 +6,7 @@ describe("Store", function () {
 
     const logger = new Logger({
         mode: "debug",
-        enable: false,
+        enable: true,
         type: true,
         timestamp: "time"
     });
