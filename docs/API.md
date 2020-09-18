@@ -2,13 +2,13 @@
 
 ## Информация
 
-Сервис предоставляет HTTP API для интеграции.
+Сервис предоставляет API, который настраивается в секции файла настройки **api**. API доступно по протоколу HTTP.
 
 ### Примеры применения
 
 проверить доступность сервера: `curl -i http://localhost:3001/api/healthcheck` или `curl -i http://localhost:3001/api/`  
-получить список идентификаторов наряд заказов: `http://localhost:3001/api/v1/nz/list`  
-получить количество наряд заказов: `http://localhost:3001/api/v1/nz/count`  
+получить список ключей: `http://localhost:3001/api/v1/store/keys`  
+получить файл **config.json** с сервера: `http://localhost:3001/api/v1/store/get/namespace/config.json`  
 
 ### API информации сервиса
 
@@ -78,7 +78,7 @@
 }
 ```
 
-### <a name="v1_store_get"></a> Получить файл по пути: v1/store/get/${namespace}/${path}
+### <a name="v1_store_get"></a> Получить обогащённый ([подробно](ENRICHMENT.md)) файл по пути: v1/store/get/${namespace}/${path}
 
 **Тело ответа**
 ```js

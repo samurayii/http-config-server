@@ -11,6 +11,7 @@
 - [Конфигурация](#configuration)
 - [Источники](SOURCES.md)
 - [HTTP API](API.md)
+- [Обогащение](ENRICHMENT.md)
 
 ## <a name="install"></a> Установка и использование
 
@@ -83,10 +84,10 @@
     timeout = 10                                # время ожидания
 
 [store]                                     # настройка хранилища
-    keys = ["keys.json", "key_folder"]      # пути к файлам ключей сервера
+    keys = ["keys.json", "key_folder"]      # пути к файлам/папкам ключей сервера, файлы могут быть json или toml
     tmp = "tmp"                             # временная папка
     [[store.sources]]                           # массив источников данных
-        keys = ["keys.json"]                    # пути к файлам ключей простанства имён
+        keys = ["keys.json"]                    # пути к файлам/папкам ключей простанства имён, файлы могут быть json или toml
         namespace = "configs"                   # имя пространства имён (должно быть уникально)
         type = "git"                            # тип источника данных
         include_regexp = "\\.(json|yml|toml)$"           # regexp для файлов вхождения
@@ -97,6 +98,9 @@
             repository = "https://user:password@server:3000/repository.git"     # репозиторий
             branch = "master"                                                   # ветка
 ```
+
+### Пример файла ключей
+
 
 ### Пример минималистичного файла конфигурации config.toml
 
@@ -148,5 +152,5 @@
 | api.parsing.methods | строка[] | ["POST"] | список методов для парсинга POST, PUT и/или PATCH |
 | docke_healthcheck.enable | логический | false | активация |
 | docke_healthcheck.timeout | число | 10 | время ожидания в секундах |
-| store.keys | массив | [] | пути к файлам ключей сервера |
+| store.keys | массив | [] | пути к файлам/папкам ключей сервера, файлы могут быть json или toml |
 | store.tmp | строка | tmp | временная папка |

@@ -227,6 +227,11 @@ export class Store extends EventEmitter implements IStore {
             const keys_file_json = <IStoreKeys>jtomler(keys_file_text, false);
  
             for (const key_name in keys_file_json) {
+
+                if (!/^[a-zA-Z]{1}[-a-zA-Z0-9_]{0,31}$/gi.test(key_name)) {
+                    this._logger.warn(`[Store] Key ${key_name} not match regexp ^[a-zA-Z]{1}[-a-zA-Z0-9_]{0,31}$`);
+                    continue;
+                }
     
                 let value = keys_file_json[key_name];
     
