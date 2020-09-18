@@ -262,7 +262,7 @@ export class StoreSourceGit extends EventEmitter implements IStoreSource {
 
         for (const key_path of this._config.keys) {
 
-            const full_key_path = path.resolve(this._tmp_folder, key_path);
+            const full_key_path = path.resolve(this._tmp_folder, key_path.replace(/(^\/|\/$)/,""));
 
             if (!fs.existsSync(full_key_path)) {
                 this._logger.error(`[Store:${this._config.namespace}] Key file ${full_key_path} not found`);

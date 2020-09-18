@@ -296,7 +296,7 @@ export class Store extends EventEmitter implements IStore {
 
         for (const key_path of this._config.keys) {
 
-            const full_key_path = path.resolve(process.cwd(), key_path);
+            const full_key_path = path.resolve(process.cwd(), key_path.replace(/\/$/,""));
 
             if (!fs.existsSync(full_key_path)) {
                 this._logger.error(`[Store] Key file ${full_key_path} not found`);
