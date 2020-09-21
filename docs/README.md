@@ -12,6 +12,7 @@
 - [Источники](SOURCES.md)
 - [HTTP API](API.md)
 - [Обогащение](ENRICHMENT.md)
+- [Docker](Docker.md)
 
 ## <a name="install"></a> Установка и использование
 
