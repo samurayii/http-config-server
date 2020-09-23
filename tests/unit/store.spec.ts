@@ -145,7 +145,7 @@ describe("Store", function () {
 
                 const file_list = store.getList("app1/config.json", "git1");
                 const file_hash = store.getHash("app1/config.json", "git1");
-
+console.log(file_list);
                 expect(file_list).to.deep.equal(["git1/app1/config.json"]);
                 expect(file_hash).to.be.an("string");
 

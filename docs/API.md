@@ -56,6 +56,7 @@
     "data": {
         "namespace": "asdad",
         "path": "/asdasd/asd",
+        "directory": true,
         "list": [
             "asd/asda/asdad1.json",
             "asd/asda/asdad2.json",

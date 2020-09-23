@@ -29,6 +29,7 @@ export interface IStore extends EventEmitter {
     stop: () => void
     getFile: (file_path: string, namespace_name: string) => Promise<string>
     getList: (folder_path: string, namespace_name: string) => string[]
+    isDirectory: (folder_path: string, namespace_name: string) => boolean
     getHash: (file_path: string, namespace_name: string) => string
     readonly keys: {
         [key: string]: string

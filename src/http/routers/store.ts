@@ -38,12 +38,14 @@ export class RouteStore {
         const file_path = ctx.params[0];
 
         const result = this._store.getList(file_path, namespace_name);
+        const is_directory = this._store.isDirectory(file_path, namespace_name);
 
         ctx.body = { 
             status: "success",
             data: {
                 namespace: namespace_name,
                 path: file_path,
+                directory: is_directory,
                 list: result
             }
         };

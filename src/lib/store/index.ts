@@ -419,4 +419,20 @@ export class Store extends EventEmitter implements IStore {
 
     }
 
+    isDirectory (file_path: string, namespace_name: string): boolean {
+
+        if (this._sources_list[namespace_name] === undefined) {
+            return;
+        }
+
+        const namespace = this._store_data[namespace_name];
+
+        if (namespace[file_path] !== undefined) {
+            return false;
+        }
+
+        return true;
+
+    }
+
 }
