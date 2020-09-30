@@ -29,7 +29,7 @@
             "minLength": 0,
             "maxLength": 256
         },
-        "git": {
+        "folder": {
             "type": "object",
             "properties": {
                 "path": {
