@@ -3,7 +3,7 @@ import {
     IStoreConfig,
     IStoreSourceGitConfig,
     IStoreSource,
-    IStoreKeys
+    IStoreKeys, IStoreSourceFolderConfig
 } from "./interfaces";
 import { EventEmitter } from "events";
 import { StoreSourceGit } from "./lib/git-source";
@@ -14,6 +14,7 @@ import { sync as sync_del } from "rimraf";
 import jtomler from "jtomler";
 import * as crypto from "crypto";
 import Handlebars from "handlebars";
+import { StoreSourceFolder } from "./lib/folder-source";
 
 const fsPromises = fs.promises;
 
@@ -78,6 +79,10 @@ export class Store extends EventEmitter implements IStore {
             switch(source.type) { 
                 case "git": { 
                     this._sources_list[source.namespace] = new StoreSourceGit(<IStoreSourceGitConfig>source, tmp_sources_folder, this._logger);
+                    break;
+                }
+                case "folder": { 
+                    this._sources_list[source.namespace] = new StoreSourceFolder(<IStoreSourceFolderConfig>source, this._logger);
                     break;
                 }
                 default: { 

@@ -14,10 +14,22 @@ export interface IStoreSourceGitConfig {
     }
 }
 
+export interface IStoreSourceFolderConfig {
+    keys: string[]
+    namespace: string
+    type: string
+    include_regexp: string
+    exclude_regexp: string
+    folder: {
+        path: string
+        interval: number
+    }
+}
+
 export interface IStoreConfig {
     keys: string[]
     tmp: string
-    sources: Array<IStoreSourceGitConfig>
+    sources: Array<IStoreSourceGitConfig|IStoreSourceFolderConfig>
 }
 
 export interface IStoreKeys {

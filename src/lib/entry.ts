@@ -8,9 +8,10 @@ import jtomler from "jtomler";
 import json_from_schema from "json-from-default-schema";
 import * as auth_user_schema from "./schemes/auth_user.json";
 import * as git_store_source_schema from "./schemes/git_store_source.json";
+import * as folder_store_source_schema from "./schemes/folder_store_source.json";
 import * as config_schema from "./schemes/config.json";
 import { IAppConfig } from "./config.interface";
-import { IStoreSourceGitConfig } from "./store";
+import { IStoreSourceFolderConfig, IStoreSourceGitConfig } from "./store";
  
 const pkg = finder(__dirname).next().value;
 
@@ -65,6 +66,11 @@ for (const item of config.store.sources) {
     if (item.type === "git") {
         config.store.sources[index] = <IStoreSourceGitConfig>json_from_schema(item, git_store_source_schema);
         validate_item = ajv_item.compile(git_store_source_schema);
+    }
+
+    if (item.type === "folder") {
+        config.store.sources[index] = <IStoreSourceFolderConfig>json_from_schema(item, folder_store_source_schema);
+        validate_item = ajv_item.compile(folder_store_source_schema);
     }
 
     const valid = validate_item(item);

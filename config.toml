@@ -18,13 +18,11 @@
     keys = ["keys.json"]
     tmp = "tmp"
     [[store.sources]]
-        keys = ["keys.json"]
+        keys = ["key.json"]
         namespace = "configs"
-        type = "git"
+        type = "folder"
         include_regexp = "\\.(json|yml|toml)$"
         exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"
         [store.sources.git]
-            interval = 10
-            commit_count = 10
-            repository = "https://user:password@server:3000/repository.git"
-            branch = "master"
+            interval = 5
+            branch = "tests/unit/folder_store"

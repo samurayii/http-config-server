@@ -14,8 +14,8 @@
         },
         "type": {
             "type": "string",
-            "default": "git",
-            "enum": ["git"]
+            "default": "folder",
+            "enum": ["folder"]
         },
         "include_regexp": {
             "type": "string",
@@ -25,40 +25,28 @@
         },
         "exclude_regexp": {
             "type": "string",
-            "default": "(.*\\/\\.git.*|.*\\\\.git.*)",
+            "default": "(^\\.$|^\\.\\.$)",
             "minLength": 0,
             "maxLength": 256
         },
         "git": {
             "type": "object",
             "properties": {
-                "interval": {
-                    "type": "integer",
-                    "default": 20,
-                    "minimum": 1
-                },
-                "commit_count": {
-                    "type": "integer",
-                    "default": 10,
-                    "minimum": 1
-                },
-                "repository": {
+                "path": {
                     "type": "string",
-                    "default": "http://user:password@server/repo.git",
+                    "default": "folder_store",
                     "minLength": 1,
                     "maxLength": 256
                 },
-                "branch": {
-                    "type": "string",
-                    "default": "master",
-                    "minLength": 1,
-                    "maxLength": 64
+                "interval": {
+                    "type": "integer",
+                    "default": 60,
+                    "minimum": 1
                 }
             },
             "required": [
-                "commit_count",
-                "repository",
-                "branch"
+                "path",
+                "interval"
             ]
         }
     },
@@ -68,6 +56,6 @@
         "type",
         "include_regexp",
         "exclude_regexp",
-        "git"
+        "folder"
     ]
 }
