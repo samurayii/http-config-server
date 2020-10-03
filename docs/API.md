@@ -16,6 +16,8 @@
 | ----- | ----- | ----- | ----- | ----- |
 | / | GET | 200 | проверить здоровье сервиса | OK |
 | /healthcheck | GET | 200 | проверить здоровье сервиса | OK |
+| /healthcheck/status | GET | 200 | получить статус здоровья | [пример](#v1_status) |
+| /_ping | GET | 200 | проверить доступность сервиса | OK |
 | v1/store/list/${namespace}/${path} | GET | 200 | получить список файлов по пути | [пример](#v1_store_list) |
 | v1/store/hash/${namespace}/${path} | GET | 200 | получить хеш файла по пути | [пример](#v1_store_hash) |
 | v1/store/get/${namespace}/${path} | GET | 200 | получить файл по пути | [пример](#v1_store_get) |
@@ -44,6 +46,17 @@
 {
     "status": "error",
     "message": "Причина ошибки"
+}
+```
+
+### <a name="v1_status"></a> Получить статус здоровья: /healthcheck/status
+
+**Тело ответа**
+```js
+{
+    "healthy": true,
+    "work_time": 21,
+    "human_work_time": "21s"
 }
 ```
 
