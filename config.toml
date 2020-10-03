@@ -23,6 +23,6 @@
         type = "folder"
         include_regexp = "\\.(json|yml|toml)$"
         exclude_regexp = "(.*\\/\\.git.*|.*\\\\.git.*)"
-        [store.sources.git]
+        [store.sources.folder]
             interval = 5
-            branch = "tests/unit/folder_store"
+            path = "tests/unit/folder_store"

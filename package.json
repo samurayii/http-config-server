@@ -1,6 +1,6 @@
 {
     "name": "http-config-server",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "description": "Centralized configuration server.",
     "main": "app.js",
     "docker_image": "samuray/http-config-server",
