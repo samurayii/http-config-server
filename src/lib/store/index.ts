@@ -412,12 +412,21 @@ export class Store extends EventEmitter implements IStore {
             ];
         }
 
-        const result: string[] = [];
+        let result: string[] = [];
+        const folder_reg = new RegExp(`^${file_path}`);
+        const file_reg = new RegExp(`^${file_path}$`);
 
         for (const testing_file in namespace) {
-            if (testing_file.includes(file_path)) {
+
+            if (file_reg.test(testing_file)) {
+                result = [`${namespace_name}/${testing_file}`];
+                break;
+            }
+         
+            if (folder_reg.test(testing_file)) {
                 result.push(`${namespace_name}/${testing_file}`);
             }
+            
         }
 
         return result;
