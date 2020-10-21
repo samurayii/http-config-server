@@ -31,7 +31,6 @@ ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/bin/bash", "/start"]
 
 COPY app /${APP_NAME}
-COPY env.js /env.js
 COPY keys.json /keys/keys.json
 COPY config.toml /${APP_NAME}/config.toml
 

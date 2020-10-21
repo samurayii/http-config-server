@@ -15,10 +15,10 @@
         enable = true
 
 [store]
-    keys = ["keys.json"]
+    keys = ["keys.json", "tests/unit/keys2", "tests/unit/keys3/limits.json"]
     tmp = "tmp"
     [[store.sources]]
-        keys = ["key.json"]
+        keys = ["key.json", "keys"]
         namespace = "configs"
         type = "folder"
         include_regexp = "\\.(json|yml|toml)$"

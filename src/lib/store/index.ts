@@ -220,7 +220,7 @@ export class Store extends EventEmitter implements IStore {
             let keys_file_text = fs.readFileSync(key_path).toString();
 
             this._logger.log(`[Store] Loading key file ${key_path}`, "dev");
-    
+ 
             for (const env_name in process.env) {
     
                 const env_arg = process.env[env_name];
@@ -262,11 +262,18 @@ export class Store extends EventEmitter implements IStore {
                     }
                 }
 
+                const file_prefix = path.basename(key_path).replace(/(\.json|\.toml)$/ig, "");
+                let full_key_name = "";
+
                 if (prefix !== undefined) {
-                    this._server_keys[`server.${prefix}.${key_name}`] = value;
+                    full_key_name = `server.${prefix}.${file_prefix}.${key_name}`;                   
                 } else {
-                    this._server_keys[`server.${key_name}`] = value;
+                    full_key_name = `server.${file_prefix}.${key_name}`;
                 }
+
+                this._server_keys[full_key_name] = value;
+
+                this._logger.log(`[Store] Initialization variable "${full_key_name}"`);
 
             }
     

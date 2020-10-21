@@ -208,11 +208,18 @@ export class StoreSourceFolder extends EventEmitter implements IStoreSource {
                     }
                 }
 
+                const file_prefix = path.basename(key_path).replace(/(\.json|\.toml)$/ig, "");
+                let full_key_name = "";
+
                 if (prefix !== undefined) {
-                    this._keys[`${this._config.namespace}.${prefix}.${key_name}`] = value;
+                    full_key_name = `${this._config.namespace}.${prefix}.${file_prefix}.${key_name}`;                   
                 } else {
-                    this._keys[`${this._config.namespace}.${key_name}`] = value;
+                    full_key_name = `${this._config.namespace}.${file_prefix}.${key_name}`;
                 }
+
+                this._keys[full_key_name] = value;
+
+                this._logger.log(`[Store:${this._config.namespace}] Initialization variable "${full_key_name}"`);
 
             }
     

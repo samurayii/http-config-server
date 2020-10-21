@@ -1,7 +1,5 @@
 #!/usr/bin/dumb-init /bin/bash
 
-node /env.js /keys/keys.json
-
 if [[ $CONFIG_SERVER_DOCKER_HEALTHCHECK_ENABLE == "true" ]]; then
     echo "docker healthcheck activated"
 fi
