@@ -31,7 +31,7 @@
 [[store.sources]]                           # массив источников данных
     keys = ["keys.json"]                    # пути к файлам/папкам ключей простанства имён, файлы могут быть json или toml
     namespace = "configs"                   # имя пространства имён (должно быть уникально)
-    type = "git"                            # тип источника данных
+    type = "folder"                         # тип источника данных
     include_regexp = "\\.(json|yml|toml)$"  # regexp для файлов вхождения
     exclude_regexp = "(^\\.$|^\\.\\.$)"     # regexp для файлов исключения
     [store.sources.folder]                  # настройка работы с папкой
